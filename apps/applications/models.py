@@ -13,6 +13,7 @@ class Application(models.Model):
     STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('reviewed', 'Reviewed'),
+        ('interviewing', 'Interviewing'),
         ('rejected', 'Rejected'),
         ('accepted', 'Accepted'),
     ]
