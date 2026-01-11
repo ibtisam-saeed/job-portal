@@ -14,3 +14,14 @@ class ApplicationCreationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         application = Application.objects.create(**validated_data)
         return application
+
+
+class ApplicationListSerializer(serializers.ModelSerializer):
+    job_title = serializers.CharField(source='job.title')
+    class Meta:
+        model = Application
+        fields = [
+            'job_title',
+            'status',
+            'applied_date'
+        ]

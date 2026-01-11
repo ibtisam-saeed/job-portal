@@ -1,6 +1,6 @@
 from rest_framework import generics
 from .models import Application
-from .serializers import ApplicationCreationSerializer
+from .serializers import ApplicationCreationSerializer, ApplicationListSerializer
 
 
 class ApplicationCreationView(generics.CreateAPIView):
@@ -9,4 +9,13 @@ class ApplicationCreationView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(applicant=self.request.user)
+
+
+class ApplicationSearchView(generics.ListAPIView):
+    serializer_class = ApplicationListSerializer
+
+    def get_queryset(self):
+        return Application.objects.filter(
+            applicant=self.request.user
+        )
     
