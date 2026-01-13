@@ -25,3 +25,16 @@ class ApplicationListSerializer(serializers.ModelSerializer):
             'status',
             'applied_date'
         ]
+
+
+class ApplicationByJobSerializer(serializers.ModelSerializer):
+    job_title = serializers.CharField(source='job.title')
+    applicant_name = serializers.CharField(source='applicant')
+    class Meta:
+        model = Application
+        fields = [
+            'job_title',
+            'applicant_name',
+            'status',
+            'applied_date'
+        ]
