@@ -5,7 +5,7 @@ from .serializers import ApplicationCreationSerializer, ApplicationListSerialize
 from .permissions import CanCreateApplication
 
 
-class ApplicationCreationView(generics.CreateAPIView):
+class ApplicationCreationView(generics.ListCreateAPIView):
     queryset = Application.objects.all()
     serializer_class = ApplicationCreationSerializer
     permission_classes = [DjangoModelPermissions]
