@@ -1,6 +1,6 @@
 from rest_framework import generics
 from .models import Application
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 from .serializers import ApplicationCreationSerializer, ApplicationListSerializer
 from .permissions import CanCreateApplication
 
@@ -8,7 +8,7 @@ from .permissions import CanCreateApplication
 class ApplicationCreationView(generics.CreateAPIView):
     queryset = Application.objects.all()
     serializer_class = ApplicationCreationSerializer
-    permission_classes = [CanCreateApplication]
+    permission_classes = [DjangoModelPermissions]
 
     def perform_create(self, serializer):
         serializer.save(applicant=self.request.user)
