@@ -1,7 +1,7 @@
 from rest_framework import generics
 from .models import Application
 from rest_framework.permissions import IsAuthenticated
-from .serializers import ApplicationCreationSerializer, ApplicationListSerializer, ApplicationByJobSerializer
+from .serializers import ApplicationCreationSerializer, ApplicationListSerializer
 from .permissions import CanCreateApplication
 
 
@@ -16,20 +16,14 @@ class ApplicationCreationView(generics.CreateAPIView):
 
 class ApplicationListView(generics.ListAPIView):
     serializer_class = ApplicationListSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Application.objects.filter(
-            applicant=self.request.user
-        )
+        queryset = Application.objects.all()
+        query_params = self.request.query_params
+        if user := query_params.get('user'):
+            queryset = queryset.filter(applicant__username__iexact=user)
+        if job_title := query_params.get('job'):
+            queryset = queryset.filter(job__title__iexact=job_title)
 
-
-class ApplicationByJobListView(generics.ListAPIView):
-    serializer_class = ApplicationByJobSerializer
-
-    def get_queryset(self):
-        job_title = self.request.query_params.get('job_title')
-        if job_title:
-            return Application.objects.filter(
-                job__title__iexact=job_title
-            )
+        return queryset
