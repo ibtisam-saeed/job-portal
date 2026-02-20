@@ -10,7 +10,20 @@ class ApplicationCreationSerializer(serializers.ModelSerializer):
             'resume',
             'applied_date',
         ]
-    
+
+    def validate(self, attr):
+        request = self.context['request']
+        applicant = request.user
+        job = attr.get('job')
+
+        if Application.objects.filter(applicant=applicant, job=job).exists():
+            raise serializers.ValidationError('You have already applied for this job')
+        
+        if job.status != 'active':
+            raise serializers.ValidationError('Job is no longer accepting applications')
+        
+        return attr
+        
     def create(self, validated_data):
         application = Application.objects.create(**validated_data)
         return application
