@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class Job(models.Model):
     job_id = models.AutoField(primary_key=True)
     admin = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posted_jobs')
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, unique=True)
     description = models.TextField()
     location = models.CharField(max_length=100)
 
