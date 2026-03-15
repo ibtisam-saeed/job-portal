@@ -27,3 +27,10 @@ class ApplicationListView(generics.ListAPIView):
             queryset = queryset.filter(job__title__iexact=job_title)
 
         return queryset
+
+
+class ApplicationByApplicantListView(generics.ListAPIView):
+    serializer_class = ApplicationListSerializer
+
+    def get_queryset(self):
+        return Application.objects.filter(applicant=self.request.user)
