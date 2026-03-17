@@ -41,4 +41,7 @@ class ApplicationByJobListView(generics.ListAPIView):
 
     def get_queryset(self):
         job_id = self.kwargs.get('job_id')
-        return Application.objects.filter(job__job_id=job_id, applicant=self.request.user)
+        if self.request.user.groups.filter(name="Admin").exists():
+            return Application.objects.filter(job__job_id=job_id)
+        else:
+            return Application.objects.filter(job__job_id=job_id, applicant=self.request.user)
