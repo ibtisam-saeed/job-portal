@@ -34,3 +34,11 @@ class ApplicationByApplicantListView(generics.ListAPIView):
 
     def get_queryset(self):
         return Application.objects.filter(applicant=self.request.user)
+
+
+class ApplicationByJobListView(generics.ListAPIView):
+    serializer_class = ApplicationListSerializer
+
+    def get_queryset(self):
+        job_id = self.kwargs.get('job_id')
+        return Application.objects.filter(job__job_id=job_id, applicant=self.request.user)
