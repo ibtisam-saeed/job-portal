@@ -6,7 +6,8 @@ from .permissions import CanCreateApplication
 
 
 class ApplicationCreationView(generics.ListCreateAPIView):
-    queryset = Application.objects.all()
+    queryset = Application.objects.select_related('job', 'applicant')
+    # Application.objects.only("id", "job_id")
     serializer_class = ApplicationCreationSerializer
     permission_classes = [DjangoModelPermissions]
 
@@ -19,7 +20,7 @@ class ApplicationListView(generics.ListAPIView):
     # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        queryset = Application.objects.all()
+        queryset = Application.objects.select_related('job', 'applicant').only('job__title', 'applicant__username')
         query_params = self.request.query_params
         if user := query_params.get('user'):
             queryset = queryset.filter(applicant__username__iexact=user)
