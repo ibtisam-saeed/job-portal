@@ -19,10 +19,10 @@ class Application(models.Model):
     ]
     status = models.CharField(choices=STATUS_CHOICES, default='pending')
 
-    # class Meta:
-        # permissions = [
-        #     ('can_create_application', 'Can Create Application')
-        # ]
+    class Meta:
+        indexes = [
+            models.Index(fields=['job', 'applicant'])
+        ]
 
     def __str__(self):
         return f"Application #{self.application_id} - {self.applicant}"
